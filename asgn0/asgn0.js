@@ -40,7 +40,7 @@ function handleDrawEvent(){
 }
 
 function handleDrawOperationEvent(){
-  let v3 = NaN
+  let v3 = 0
   ctx.fillStyle='black';
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
@@ -89,8 +89,47 @@ function handleDrawOperationEvent(){
     drawVector(v3, "green");
     v3 = v2.mul(scalar);
     drawVector(v3, "green");
-
   }
+
+  else if (operation_type == 'mag'){
+    let v1_output = Math.round(v1.magnitude());
+    console.log("Magnitude v1: ", v1_output);
+    let v2_output = Math.round(v2.magnitude());
+    console.log("Magnitude v2: ", v2_output);
+  }
+
+  else if (operation_type == "norm"){
+    let v1_output = v1.normalize();
+    drawVector(v1_output, "green");
+    let v2_output = v2.normalize();
+    drawVector(v2_output, "green");
+  }
+
+  else if (operation_type == "angle"){
+    let angle = angleBetween(v1,v2);
+    console.log("Angle: ", angle);
+  }
+
+  else if (operation_type == "area"){
+    let area = areaTriangle(v1,v2);
+    console.log("Area: ", area);
+  }
+}
+
+function angleBetween(v1,v2){
+  let dot = Vector3.dot(v1,v2);
+  let m1 = v1.magnitude();
+  let m2 = v2.magnitude();
+  let cosine_theta = dot / (m1 * m2);
+  let theta = Math.acos(cosine_theta);
+  let degrees = theta * (180 / Math.PI);
+
+  return Math.round(degrees)
+}
+
+function areaTriangle(v1, v2){
+  let computation = 0.5 * (Vector3.cross(v1,v2)).magnitude();
+  return computation;
 }
 
 const drawButton = document.getElementById('Draw');

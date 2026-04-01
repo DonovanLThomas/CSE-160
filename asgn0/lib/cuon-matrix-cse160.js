@@ -101,7 +101,7 @@ class Vector3 {
       */
     static dot(other1, other2) {
         // Insert your code here.
-        let d = 0; // Modify this line to calculate this vector's magnitude.
+        let d = (other1.elements[0] * other2.elements[0]) +(other1.elements[1] * other2.elements[1]) + (other1.elements[2] * other2.elements[2]); // Modify this line to calculate this vector's magnitude.
 
         // Don't delete the return statement.
         return d;
@@ -114,7 +114,14 @@ class Vector3 {
     static cross(other1, other2) {
         // Insert your code here.
         // This function should create and return a new vector.
-        let v3 = new Vector3(); // Modify this line to calculate cross product between other1 and other2.
+        let a1 = other1.elements[0];
+        let a2 = other1.elements[1];
+        let a3 = other1.elements[2];
+        let b1 = other2.elements[0];
+        let b2 = other2.elements[1];
+        let b3 = other2.elements[2];
+
+        let v3 = new Vector3([( (a2 * b3) - (a3 * b2) ), ( (a3 * b1) - (a1 * b3) ), ( (a1 * b2) - (a2 * b1) ) ]); // Modify this line to calculate cross product between other1 and other2.
 
         // Don't delete the return statement.
         return v3;
@@ -126,8 +133,8 @@ class Vector3 {
       */
     magnitude() {
         // Insert your code here.
-        let m = 0; // Modify this line to calculate this vector's magnitude.
-
+        let m = Math.sqrt((this.elements[0] ** 2) + (this.elements[1]** 2) + (this.elements[2] ** 2)); // Modify this line to calculate this vector's magnitude.
+        if (m == 0){return 0}
         // Don't delete the return statement.
         return m;
     };
@@ -139,7 +146,11 @@ class Vector3 {
     normalize() {
         // Insert your code here.
         // This function should change this vector (this.elements) and not create a new vector.
-
+        let this_magnitude = this.magnitude()
+        if (this_magnitude == 0) {return this}
+        for(let i = 0; i < 3; i++){
+          this.elements[i] = this.elements[i] / this_magnitude
+        }
         // Don't delete the return statement.
         return this;
     };
