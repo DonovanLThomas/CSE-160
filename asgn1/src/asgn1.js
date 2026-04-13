@@ -8,6 +8,7 @@ let g_size = 10;
 let g_r = 1;
 let g_g = 0;
 let g_b = 0;
+let g_a = 1;
 let g_segments = 12;
 let isDrawing = false;
 let lastDragX = null;
@@ -145,7 +146,7 @@ function addShapeFromEvent(ev, dirX = 0, dirY = 1){
             r: g_r,
             g: g_g,
             b: g_b,
-            a: 1.0
+            a: g_a
         });
    
 
@@ -194,6 +195,8 @@ function drawLiftoff(){
 function main(){
     setupWebGL();
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.clear(gl.COLOR_BUFFER_BIT);
     connectVariablesToGLSL();
     renderAllShapes();
@@ -203,11 +206,19 @@ function main(){
     canvas.onmouseup = stopDrawing;
     canvas.onmouseleave = stopDrawing;
     let size_slider = document.getElementById("size_slider");
+    let size_value = document.getElementById("size_value");
     let r_slider = document.getElementById("r_slider");
+    let r_value = document.getElementById("r_value");
     let g_slider = document.getElementById("g_slider");
+    let g_value = document.getElementById("g_value");
     let b_slider = document.getElementById("b_slider");
+    let b_value = document.getElementById("b_value");
+    let a_slider = document.getElementById("a_slider");
+    let a_value = document.getElementById("a_value");
     let segments_slider = document.getElementById("segments_slider");
+    let segments_value = document.getElementById("segments_value");
     let clear_button = document.getElementById("clear");
+    let undo_button = document.getElementById("undo");
     let log_button = document.getElementById("log_drawing");
     let liftoff_button = document.getElementById("liftoff");
     let point_button = document.getElementById("point");
@@ -216,23 +227,36 @@ function main(){
 
     size_slider.oninput = function() {
         g_size = Number(this.value);
+        size_value.textContent = this.value;
     };
 
     r_slider.oninput = function() {
         g_r = Number(this.value) / 255;
+        r_value.textContent = this.value;
     };
     g_slider.oninput = function() {
         g_g = Number(this.value) / 255;
+        g_value.textContent = this.value;
     };
     b_slider.oninput = function() {
         g_b = Number(this.value) / 255;
+        b_value.textContent = this.value;
+    };
+    a_slider.oninput = function() {
+        g_a = Number(this.value) / 100;
+        a_value.textContent = this.value;
     };
     segments_slider.oninput = function() {
         g_segments = Number(this.value);
+        segments_value.textContent = this.value;
     };
 
     clear_button.onclick = function() {
         g_shapes = [];
+        renderAllShapes();
+    };
+    undo_button.onclick = function() {
+        g_shapes.pop();
         renderAllShapes();
     };
     log_button.onclick = logDrawingData;

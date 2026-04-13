@@ -12,23 +12,40 @@
         </canvas>
 
         <button id="clear">Clear</button>
+        <button id="undo">Undo</button>
         <button id="log_drawing">Log Drawing Data</button>
         <button id="liftoff">LiftOff!</button>
+
+        <p>
+            Awesome feature add-ins: Adjustable drag gap through the source code
+            via the <code>DRAG_SPACING</code> variable, an Undo button, and an alpha slider that controls paint
+            transparency.
+        </p>
         
         <h2>Shape Selection</h2>
         <button id="point">Point</button>
         <button id="triangle">Triangle</button>
         <button id="circle">Circle</button>
 
-        <h2>Size</h2>
+        <h2>Brush Size</h2>
+        <label for="size_slider">Size: <span id="size_value">1</span></label>
         <input type="range" min="1" max="50" value="1" id="size_slider">
 
-        <h2>Color</h2>
+        <h2>Brush Color</h2>
+        <label for="r_slider">Red: <span id="r_value">1</span></label>
         <input type="range" min="0" max="255" value="1" id="r_slider">
+
+        <label for="g_slider">Green: <span id="g_value">1</span></label>
         <input type="range" min="0" max="255" value="1" id="g_slider">
+
+        <label for="b_slider">Blue: <span id="b_value">1</span></label>
         <input type="range" min="0" max="255" value="1" id="b_slider">
 
+        <label for="a_slider">Alpha: <span id="a_value">100</span>%</label>
+        <input type="range" min="0" max="100" value="100" id="a_slider">
+
         <h2>Circle Segments</h2>
+        <label for="segments_slider">Smoothness: <span id="segments_value">12</span></label>
         <input type="range" min="3" max="36" value="12" id="segments_slider">
 
 
