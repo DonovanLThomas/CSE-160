@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8 " />
+        <title>Asgn1 Draw</title>
+    </head>
+
+    <body onload="main()">
+        <canvas id="webgl" width="400" height="400">
+            Use a browser that supports canvas
+        </canvas>
+
+        <button id="clear">Clear</button>
+        <button id="log_drawing">Log Drawing Data</button>
+        <button id="liftoff">LiftOff!</button>
+        
+        <h2>Shape Selection</h2>
+        <button id="point">Point</button>
+        <button id="triangle">Triangle</button>
+        <button id="circle">Circle</button>
+
+        <h2>Size</h2>
+        <input type="range" min="1" max="50" value="1" id="size_slider">
+
+        <h2>Color</h2>
+        <input type="range" min="0" max="255" value="1" id="r_slider">
+        <input type="range" min="0" max="255" value="1" id="g_slider">
+        <input type="range" min="0" max="255" value="1" id="b_slider">
+
+        <h2>Circle Segments</h2>
+        <input type="range" min="3" max="36" value="12" id="segments_slider">
+
+
+
+       
+
+        <script src="../lib/webgl-utils.js"></script>
+        <script src="../lib/webgl-debug.js"></script>
+        <script src="../lib/cuon-utils.js"></script>
+        <script src="asgn1.js"></script>
+        <script src="liftoff.js"></script>
+    </body>
+</html>
