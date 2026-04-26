@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8 " />
+        <title>Asgn1 Draw</title>
+    </head>
+
+    <body onload="main()">
+        <canvas id="webgl" width="400" height="400">
+            Use a browser that supports canvas
+        </canvas>
+
+        <button id="animationOnButton">Animation On</button>
+<button id="animationOffButton">Animation Off</button>
+
+        <label for="angleSlide">Global Rotation</label>
+<input type="range" min="-180" max="180" value="0" id="angleSlide">
+        <br>
+        <label for="frontNearUpperLegSlide">Front Near Upper Leg</label>
+<input type="range" min="-45" max="45" value="0" id="frontNearUpperLegSlide">
+        <br>
+        <label for="frontNearLowerLegSlide">Front Near Lower Leg</label>
+<input type="range" min="-45" max="45" value="0" id="frontNearLowerLegSlide">
+        <br>
+        <label for="frontNearFootSlide">Front Near Foot</label>
+<input type="range" min="-45" max="45" value="0" id="frontNearFootSlide">
+        <br>
+        <label for="frontFarUpperLegSlide">Front Far Upper Leg</label>
+<input type="range" min="-45" max="45" value="0" id="frontFarUpperLegSlide">
+        <br>
+        <label for="frontFarLowerLegSlide">Front Far Lower Leg</label>
+<input type="range" min="-45" max="45" value="0" id="frontFarLowerLegSlide">
+        <br>
+        <label for="frontFarFootSlide">Front Far Foot</label>
+<input type="range" min="-45" max="45" value="0" id="frontFarFootSlide">
+        <br>
+        <label for="backNearUpperLegSlide">Back Near Upper Leg</label>
+<input type="range" min="-45" max="45" value="0" id="backNearUpperLegSlide">
+        <br>
+        <label for="backNearLowerLegSlide">Back Near Lower Leg</label>
+<input type="range" min="-45" max="45" value="0" id="backNearLowerLegSlide">
+        <br>
+        <label for="backNearFootSlide">Back Near Foot</label>
+<input type="range" min="-45" max="45" value="0" id="backNearFootSlide">
+        <br>
+        <label for="backFarUpperLegSlide">Back Far Upper Leg</label>
+<input type="range" min="-45" max="45" value="0" id="backFarUpperLegSlide">
+        <br>
+        <label for="backFarLowerLegSlide">Back Far Lower Leg</label>
+<input type="range" min="-45" max="45" value="0" id="backFarLowerLegSlide">
+        <br>
+        <label for="backFarFootSlide">Back Far Foot</label>
+<input type="range" min="-45" max="45" value="0" id="backFarFootSlide">
+        <br>
+        <label for="tailBaseSlide">Tail Base</label>
+<input type="range" min="-45" max="45" value="0" id="tailBaseSlide">
+        <br>
+        <label for="tailMiddleSlide">Tail Middle</label>
+<input type="range" min="-45" max="45" value="0" id="tailMiddleSlide">
+        <br>
+        <label for="tailTipSlide">Tail Tip</label>
+<input type="range" min="-45" max="45" value="0" id="tailTipSlide">
+       
+
+       
+
+        <script src="../lib/webgl-utils.js"></script>
+        <script src="../lib/webgl-debug.js"></script>
+        <script src="../lib/cuon-utils.js"></script>
+        <script src="../lib/cuon-matrix-cse160.js"></script>
+        <script src="point.js"></script>
+        <script src="triangle.js"></script>
+        <script src="circle.js"></script>
+        <script src="cube.js"></script>
+        <script src="cylinder.js"></script>
+        <script src="asgn2.js"></script>
+    </body>
+</html>
