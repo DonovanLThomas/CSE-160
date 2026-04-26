@@ -30,6 +30,9 @@ let gAnimationOn = false;
 let gPokeAnimation = false;
 let gPokeStartTime = 0;
 let gPokeBodyBounce = 0;
+let gMouseDragging = false;
+let gLastMouseX = 0;
+let gLastMouseY = 0;
 
 
 let VSHADER_SOURCE =
@@ -181,6 +184,11 @@ function connectSlider(id, updateValue) {
     })
 }
 
+function updateRotationSliders() {
+    document.getElementById('xRotationSlide').value = gAnimalGlobalXRotation;
+    document.getElementById('yRotationSlide').value = gAnimalGlobalRotation;
+}
+
 function renderScene() {
      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -282,7 +290,38 @@ function main() {
         if (ev.shiftKey) {
             gPokeAnimation = true;
             gPokeStartTime = g_seconds;
+            return;
         }
+
+        gMouseDragging = true;
+        gLastMouseX = ev.clientX;
+        gLastMouseY = ev.clientY;
+    };
+
+    canvas.onmousemove = function(ev) {
+        if (!gMouseDragging) {
+            return;
+        }
+
+        let dx = ev.clientX - gLastMouseX;
+        let dy = ev.clientY - gLastMouseY;
+        gLastMouseX = ev.clientX;
+        gLastMouseY = ev.clientY;
+
+        gAnimalGlobalRotation += dx * 0.5;
+        gAnimalGlobalXRotation += dy * 0.5;
+        gAnimalGlobalXRotation = Math.max(-45, Math.min(45, gAnimalGlobalXRotation));
+        gAnimalGlobalRotation = Math.max(-180, Math.min(180, gAnimalGlobalRotation));
+        updateRotationSliders();
+        renderScene();
+    };
+
+    canvas.onmouseup = function() {
+        gMouseDragging = false;
+    };
+
+    canvas.onmouseleave = function() {
+        gMouseDragging = false;
     };
 
     document.getElementById('animationOnButton').onclick = function() {
