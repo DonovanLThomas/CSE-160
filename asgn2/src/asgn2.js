@@ -189,6 +189,24 @@ function updateRotationSliders() {
     document.getElementById('yRotationSlide').value = gAnimalGlobalRotation;
 }
 
+function setAllJointAngles(value) {
+    gFrontNearUpperLegAngle = value;
+    gFrontNearLowerLegAngle = value;
+    gFrontNearFootAngle = value;
+    gFrontFarUpperLegAngle = value;
+    gFrontFarLowerLegAngle = value;
+    gFrontFarFootAngle = value;
+    gBackNearUpperLegAngle = value;
+    gBackNearLowerLegAngle = value;
+    gBackNearFootAngle = value;
+    gBackFarUpperLegAngle = value;
+    gBackFarLowerLegAngle = value;
+    gBackFarFootAngle = value;
+    gTailBaseAngle = value;
+    gTailMiddleAngle = value;
+    gTailTipAngle = value;
+}
+
 function renderScene() {
      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
@@ -337,9 +355,19 @@ function main() {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     connectSlider('xRotationSlide', function(value) { gAnimalGlobalXRotation = value; });
     connectSlider('yRotationSlide', function(value) { gAnimalGlobalRotation = value; });
+    connectSlider('allJointsSlide', setAllJointAngles);
     connectSlider('frontNearUpperLegSlide', function(value) { gFrontNearUpperLegAngle = value; });
     connectSlider('frontNearLowerLegSlide', function(value) { gFrontNearLowerLegAngle = value; });
     connectSlider('frontNearFootSlide', function(value) { gFrontNearFootAngle = value; });
+    connectSlider('frontFarUpperLegSlide', function(value) { gFrontFarUpperLegAngle = value; });
+    connectSlider('frontFarLowerLegSlide', function(value) { gFrontFarLowerLegAngle = value; });
+    connectSlider('frontFarFootSlide', function(value) { gFrontFarFootAngle = value; });
+    connectSlider('backNearUpperLegSlide', function(value) { gBackNearUpperLegAngle = value; });
+    connectSlider('backNearLowerLegSlide', function(value) { gBackNearLowerLegAngle = value; });
+    connectSlider('backNearFootSlide', function(value) { gBackNearFootAngle = value; });
+    connectSlider('backFarUpperLegSlide', function(value) { gBackFarUpperLegAngle = value; });
+    connectSlider('backFarLowerLegSlide', function(value) { gBackFarLowerLegAngle = value; });
+    connectSlider('backFarFootSlide', function(value) { gBackFarFootAngle = value; });
     connectSlider('tailBaseSlide', function(value) { gTailBaseAngle = value; });
     connectSlider('tailMiddleSlide', function(value) { gTailMiddleAngle = value; });
     connectSlider('tailTipSlide', function(value) { gTailTipAngle = value; });
