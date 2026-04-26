@@ -7,6 +7,7 @@ let u_ModelMatrix;
 
 let u_GlobalRotation;
 let gAnimalGlobalRotation = 0;
+let gAnimalGlobalXRotation = 0;
 let gFrontNearUpperLegAngle = 0;
 let gFrontNearLowerLegAngle = 0;
 let gFrontNearFootAngle = 0;
@@ -26,6 +27,9 @@ let gTailTipAngle = 0;
 let g_seconds = 0;
 let g_startTime = performance.now() / 1000.0;
 let gAnimationOn = false;
+let gPokeAnimation = false;
+let gPokeStartTime = 0;
+let gPokeBodyBounce = 0;
 
 
 let VSHADER_SOURCE =
@@ -137,7 +141,7 @@ function drawTrunk(bodyBounce) {
 
 function drawTail(bodyBounce) {
     let tailJoint = new Matrix4();
-    tailJoint.translate(0.58, 0.08 + bodyBounce, 0);
+    tailJoint.translate(0.50, 0.08 + bodyBounce, 0);
     tailJoint.rotate(18 + gTailBaseAngle, 0, 0, 1);
 
     let tailBase = new Cylinder();
@@ -181,12 +185,14 @@ function renderScene() {
      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     let globalRotMat = new Matrix4();
+    globalRotMat.rotate(gAnimalGlobalXRotation, 1, 0, 0);
     globalRotMat.rotate(gAnimalGlobalRotation, 0, 1, 0);
     gl.uniformMatrix4fv(u_GlobalRotation, false, globalRotMat.elements);
     let bodyBounce = 0;
     if (gAnimationOn) {
         bodyBounce = 0.03 * Math.sin(g_seconds * 6);
     }
+    bodyBounce += gPokeBodyBounce;
 
     let body = new Cube();
     body.color = [0.5, 0.5, 0.5, 1.0];
@@ -221,6 +227,8 @@ function tick() {
 }
 
 function updateAnimationAngles() {
+    gPokeBodyBounce = 0;
+
     if (gAnimationOn) {
         let walkSpeed = g_seconds * 3;
 
@@ -243,11 +251,39 @@ function updateAnimationAngles() {
         gTailMiddleAngle = 12 * Math.sin(walkSpeed + 1.2);
         gTailTipAngle = 10 * Math.sin(walkSpeed + 1.9);
     }
+
+    if (gPokeAnimation) {
+        let pokeTime = g_seconds - gPokeStartTime;
+        let pokeDuration = 1.2;
+
+        if (pokeTime > pokeDuration) {
+            gPokeAnimation = false;
+            gPokeBodyBounce = 0;
+        } else {
+            let pokeWave = Math.sin(Math.PI * pokeTime / pokeDuration);
+            let shakeWave = Math.sin(pokeTime * 22);
+
+            gPokeBodyBounce = 0.08 * pokeWave;
+            gFrontNearUpperLegAngle = -25 * pokeWave;
+            gFrontFarUpperLegAngle = -25 * pokeWave;
+            gBackNearUpperLegAngle = 18 * pokeWave;
+            gBackFarUpperLegAngle = 18 * pokeWave;
+            gTailBaseAngle = 35 * pokeWave + 10 * shakeWave;
+            gTailMiddleAngle = -25 * pokeWave;
+            gTailTipAngle = 30 * shakeWave;
+        }
+    }
 }
 
 function main() {
     setupWebGL();
     connectVariablesToGLSL();
+    canvas.onmousedown = function(ev) {
+        if (ev.shiftKey) {
+            gPokeAnimation = true;
+            gPokeStartTime = g_seconds;
+        }
+    };
 
     document.getElementById('animationOnButton').onclick = function() {
     gAnimationOn = true;
@@ -260,19 +296,11 @@ function main() {
 
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    connectSlider('angleSlide', function(value) { gAnimalGlobalRotation = value; });
+    connectSlider('xRotationSlide', function(value) { gAnimalGlobalXRotation = value; });
+    connectSlider('yRotationSlide', function(value) { gAnimalGlobalRotation = value; });
     connectSlider('frontNearUpperLegSlide', function(value) { gFrontNearUpperLegAngle = value; });
     connectSlider('frontNearLowerLegSlide', function(value) { gFrontNearLowerLegAngle = value; });
     connectSlider('frontNearFootSlide', function(value) { gFrontNearFootAngle = value; });
-    connectSlider('frontFarUpperLegSlide', function(value) { gFrontFarUpperLegAngle = value; });
-    connectSlider('frontFarLowerLegSlide', function(value) { gFrontFarLowerLegAngle = value; });
-    connectSlider('frontFarFootSlide', function(value) { gFrontFarFootAngle = value; });
-    connectSlider('backNearUpperLegSlide', function(value) { gBackNearUpperLegAngle = value; });
-    connectSlider('backNearLowerLegSlide', function(value) { gBackNearLowerLegAngle = value; });
-    connectSlider('backNearFootSlide', function(value) { gBackNearFootAngle = value; });
-    connectSlider('backFarUpperLegSlide', function(value) { gBackFarUpperLegAngle = value; });
-    connectSlider('backFarLowerLegSlide', function(value) { gBackFarLowerLegAngle = value; });
-    connectSlider('backFarFootSlide', function(value) { gBackFarFootAngle = value; });
     connectSlider('tailBaseSlide', function(value) { gTailBaseAngle = value; });
     connectSlider('tailMiddleSlide', function(value) { gTailMiddleAngle = value; });
     connectSlider('tailTipSlide', function(value) { gTailTipAngle = value; });
