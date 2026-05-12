@@ -283,8 +283,8 @@ function setupInput() {
     if ([" ", "shift"].includes(ev.key.toLowerCase())) ev.preventDefault();
     if (ev.key.toLowerCase() === "c" && !ev.repeat) toggleFreeRoam();
     if (ev.key.toLowerCase() === "f") addBlockInFront();
-    if (ev.key.toLowerCase() === "x") deleteBlockInFront();
-    if (ev.key.toLowerCase() === "r" && !ev.repeat) restartGame();
+    if (ev.key.toLowerCase() === "r") deleteBlockInFront();
+    if (ev.key.toLowerCase() === "t" && !ev.repeat) restartGame();
   });
   window.addEventListener("keyup", (ev) => {
     keys[ev.key.toLowerCase()] = false;

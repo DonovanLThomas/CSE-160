@@ -16,8 +16,8 @@ Then open `http://127.0.0.1:8000/`.
 - `C`: toggle free-roam mode
 - `Space`, `Shift`: move up/down while free roam is on
 - `F`: add one block in front of the camera
-- `X`: remove one block in front of the camera
-- `R`: restart the game
+- `R`: remove one block in front of the camera
+- `T`: restart the game
 
 ## Features Included
 
