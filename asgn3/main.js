@@ -46,6 +46,7 @@ let u_BaseColor;
 let u_TexColorWeight;
 let u_WhichTexture;
 let worldMap;
+let textureMap;
 let collected = 0;
 let gameWon = false;
 let gateOpen = false;
@@ -76,6 +77,7 @@ function main() {
   initTextures();
   camera = new Camera(canvas);
   worldMap = createWorldMap();
+  textureMap = createTextureMap(worldMap);
   setupInput();
 
   gl.enable(gl.DEPTH_TEST);
@@ -276,6 +278,15 @@ function createWorldMap() {
   return rows.map((row) => row.split("").map((n) => Number(n)));
 }
 
+function createTextureMap(map) {
+  return map.map((row, z) =>
+    row.map((height, x) => {
+      if (height === 0) return 0;
+      return x === 0 || z === 0 || x === SIZE - 1 || z === SIZE - 1 ? 2 : 0;
+    })
+  );
+}
+
 function setupInput() {
   window.addEventListener("resize", resizeCanvas);
   window.addEventListener("keydown", (ev) => {
@@ -405,6 +416,7 @@ function resetAfterCaught() {
 
 function restartGame() {
   worldMap = createWorldMap();
+  textureMap = createTextureMap(worldMap);
   collected = 0;
   gameWon = false;
   gateOpen = false;
@@ -454,7 +466,7 @@ function drawWalls() {
     for (let x = 0; x < SIZE; x++) {
       const height = worldMap[z][x];
       for (let y = 0; y < height; y++) {
-        const tex = x === 0 || z === 0 || x === SIZE - 1 || z === SIZE - 1 ? 2 : 0;
+        const tex = textureMap[z][x];
         drawCube(x, y, z, 1, 1, 1, [0.62, 0.58, 0.52, 1], tex, 0.9);
       }
     }
@@ -542,6 +554,7 @@ function addBlockInFront() {
   const h = worldMap[target.z][target.x];
   if (h < 4) {
     worldMap[target.z][target.x] = h + 1;
+    if (h === 0) textureMap[target.z][target.x] = 0;
     showMessage("Block added.");
   }
 }
@@ -552,6 +565,7 @@ function deleteBlockInFront() {
   const h = worldMap[target.z][target.x];
   if (h > 0) {
     worldMap[target.z][target.x] = h - 1;
+    if (h - 1 === 0) textureMap[target.z][target.x] = 0;
     showMessage("Block removed.");
   }
 }
@@ -594,6 +608,7 @@ function openEscapeGate() {
   gateOpen = true;
   for (let x = 14; x <= 17; x++) {
     worldMap[30][x] = 0;
+    textureMap[30][x] = 0;
   }
 }
 
