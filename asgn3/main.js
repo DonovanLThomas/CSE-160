@@ -454,7 +454,7 @@ function drawWalls() {
     for (let x = 0; x < SIZE; x++) {
       const height = worldMap[z][x];
       for (let y = 0; y < height; y++) {
-        const tex = height >= 4 ? 2 : 0;
+        const tex = x === 0 || z === 0 || x === SIZE - 1 || z === SIZE - 1 ? 2 : 0;
         drawCube(x, y, z, 1, 1, 1, [0.62, 0.58, 0.52, 1], tex, 0.9);
       }
     }
