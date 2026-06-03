@@ -314,7 +314,7 @@ function makeMaterials() {
     brightBulb: new THREE.MeshStandardMaterial({ color: 0xffd36b, emissive: 0xff9f2e, emissiveIntensity: 1.7, roughness: 0.25 }),
     sparkCeramic: new THREE.MeshStandardMaterial({ color: 0xe7dec9, emissive: 0x3d2813, emissiveIntensity: 0.18, roughness: 0.38 }),
     sparkMetal: new THREE.MeshStandardMaterial({ color: 0x9ca0a3, emissive: 0xffa33a, emissiveIntensity: 0.45, roughness: 0.26, metalness: 0.75 }),
-    sparkGlow: new THREE.MeshBasicMaterial({ color: 0xffb23f, transparent: true, opacity: 0.44, depthWrite: false }),
+    sparkGlow: new THREE.MeshBasicMaterial({ color: 0xffb23f, transparent: true, opacity: 0.34, depthWrite: false }),
     markerRed: new THREE.MeshStandardMaterial({ color: 0xff2a2a, emissive: 0xff0505, emissiveIntensity: 1.8, roughness: 0.34 }),
     markerGlow: new THREE.MeshBasicMaterial({ color: 0xff3333, transparent: true, opacity: 0.48, depthWrite: false }),
     concrete: new THREE.MeshStandardMaterial({ map: concreteTexture, color: 0x343239, roughness: 0.92 }),
@@ -721,8 +721,9 @@ function createSparkPlugModel(parent) {
   }
 
   const ring = new THREE.Mesh(shared.glowRing, materials.sparkGlow.clone());
-  ring.position.y = -0.38;
+  ring.position.y = -parent.userData.baseY + 0.075;
   ring.rotation.x = Math.PI / 2;
+  ring.scale.set(0.82, 0.82, 0.82);
   ring.name = 'spark plug pickup glow ring';
   parent.add(ring);
 }
@@ -759,6 +760,11 @@ function addSparkPlugTemplateClone(parent) {
   const plug = sparkPlugTemplate.clone(true);
   plug.position.y = -0.45;
   plug.rotation.y = Math.PI * 0.18;
+  plug.updateMatrixWorld(true);
+  const box = new THREE.Box3().setFromObject(plug);
+  const center = box.getCenter(new THREE.Vector3());
+  plug.position.x -= center.x;
+  plug.position.z -= center.z;
   parent.add(plug);
 }
 
@@ -1317,6 +1323,14 @@ function resetGame({ showIntro = false } = {}) {
     collectible.visible = true;
     collectible.userData.collected = false;
     collectible.rotation.set(0, 0, 0);
+    const visual = collectible.children.find((child) => child.name === 'spark plug visual');
+    const ring = collectible.children.find((child) => child.name === 'spark plug pickup glow ring');
+    if (visual) visual.position.y = 0;
+    if (ring) {
+      ring.position.y = -collectible.userData.baseY + 0.075;
+      ring.scale.set(0.82, 0.82, 0.82);
+      ring.material.opacity = 0.34;
+    }
   });
   poweredObjects.forEach((powered) => {
     powered.material.userData.power = 0.2;
@@ -1437,7 +1451,16 @@ function animateGeneratorAndGate(delta, elapsed) {
 function animateCollectibles(elapsed) {
   collectibles.forEach((collectible, index) => {
     if (collectible.userData.collected) return;
-    collectible.position.y = collectible.userData.baseY + Math.sin(elapsed * 2.7 + index) * 0.16;
+    const visual = collectible.children.find((child) => child.name === 'spark plug visual');
+    const ring = collectible.children.find((child) => child.name === 'spark plug pickup glow ring');
+    if (visual) {
+      visual.position.y = Math.sin(elapsed * 2.7 + index) * 0.16;
+    }
+    if (ring) {
+      const pulse = 0.78 + Math.abs(Math.sin(elapsed * 3.2 + index)) * 0.18;
+      ring.scale.set(pulse, pulse, pulse);
+      ring.material.opacity = 0.24 + Math.abs(Math.sin(elapsed * 3.2 + index)) * 0.18;
+    }
   });
 }
 
