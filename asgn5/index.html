@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Crash Test Blackout</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <canvas id="scene"></canvas>
+
+    <section id="startOverlay" class="start-overlay" aria-label="Game instructions">
+      <div class="start-card">
+        <p class="eyebrow">CSE 160 Assignment 5</p>
+        <h1>Crash Test Blackout</h1>
+        <p class="intro">
+          Start inside a broken-down crash testing warehouse, collect seven spark plugs, repair
+          the generator fuse box, then sprint through the green EXIT gate when it opens.
+        </p>
+        <div class="instruction-grid">
+          <span><strong>WASD</strong> Move</span>
+          <span><strong>Mouse</strong> Look</span>
+          <span><strong>Shift</strong> Sprint</span>
+          <span><strong>E / Click</strong> Collect plugs / repair generator</span>
+          <span><strong>F / CCTV View</strong> Pause and inspect from an indoor camera</span>
+        </div>
+        <p class="intro small">
+          Wow point: animated chaser, dark flashlight-led gameplay, crash warehouse models,
+          generator power surge, CCTV camera view, collision, and opening escape gate.
+        </p>
+        <button id="startButton" type="button">Start Escape</button>
+      </div>
+    </section>
+
+    <main class="hud" aria-label="Game status">
+      <section class="panel title-panel">
+        <p class="eyebrow">CSE 160 Assignment 5</p>
+        <h1>Crash Test Blackout</h1>
+      </section>
+
+      <section class="panel stats-panel">
+        <div>
+          <span class="label">Spark Plugs</span>
+          <strong id="score">0 / 7</strong>
+        </div>
+        <div>
+          <span class="label">Chaser</span>
+          <strong id="status">Dormant</strong>
+        </div>
+        <div>
+          <span class="label">Stamina</span>
+          <strong id="stamina">100%</strong>
+        </div>
+      </section>
+
+      <section class="panel objective-panel">
+        <p id="message">Click the scene, then use WASD to move. Find spark plugs, repair the generator, and escape.</p>
+        <button id="reset" type="button">Reset</button>
+      </section>
+
+      <section class="panel controls-panel">
+        <p>WASD move | Mouse look | Shift sprint | E/click collect | Flashlight slows chaser</p>
+        <button id="freeCamButton" type="button">CCTV View</button>
+      </section>
+    </main>
+
+    <aside class="assignment-note">
+      <strong>Wow point:</strong> first-person crash testing warehouse escape with spark plugs, generator repair,
+      CCTV camera inspection, an angrier animated chaser, collision, restored lights, and an opening gate.
+    </aside>
+
+    <section id="cctvOverlay" class="cctv-overlay is-hidden" aria-label="CCTV camera view">
+      <div class="cctv-topline">
+        <span>CCTV CAMERA VIEW - CRASH BAY 01</span>
+        <span>F TO RESUME</span>
+      </div>
+      <div class="cctv-reticle" aria-hidden="true"></div>
+    </section>
+
+    <section id="endOverlay" class="end-overlay is-hidden" aria-label="Escape summary">
+      <div class="security-frame">
+        <div class="security-topline">
+          <span>CAM 04 - CRASH BAY EXIT</span>
+          <span>REC</span>
+        </div>
+        <h2>TEST CLEARED</h2>
+        <p>Generator restored. Exit gate opened.</p>
+        <dl>
+          <div>
+            <dt>Spark plugs</dt>
+            <dd>7 / 7 recovered</dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd>Subject exited warehouse</dd>
+          </div>
+        </dl>
+        <button id="endRestart" type="button">Restart Run</button>
+      </div>
+    </section>
+
+    <section id="gameOverOverlay" class="end-overlay danger-overlay is-hidden" aria-label="Game over summary">
+      <div class="security-frame danger-frame">
+        <div class="security-topline">
+          <span>CAM 02 - IMPACT FLOOR</span>
+          <span>ALERT</span>
+        </div>
+        <h2>GAME OVER</h2>
+        <p>The chaser reached you before the crash bay could be secured.</p>
+        <dl>
+          <div>
+            <dt>Spark plugs</dt>
+            <dd id="gameOverScore">0 / 7 recovered</dd>
+          </div>
+          <div>
+            <dt>Status</dt>
+            <dd>Subject lost in test bay</dd>
+          </div>
+        </dl>
+        <button id="gameOverRestart" type="button">Restart Run</button>
+      </div>
+    </section>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
