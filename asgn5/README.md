@@ -26,6 +26,7 @@ Use a local server instead of opening `index.html` directly, because the project
 - Hold `Shift` to sprint while stamina lasts.
 - Press `E` or click when near a spark plug to collect it.
 - Aim the flashlight at the chaser to slow or stagger it.
+- Follow the red arrow marker above the fuse box when you need to find the generator.
 - After collecting all seven spark plugs, go to the generator/fuse box and press `E` or click to restore power.
 - After the power surge, reach the opened exit gate to win.
 - Press `F` or the `CCTV View` button to pause gameplay and inspect the warehouse from an indoor security camera view.
@@ -78,6 +79,7 @@ If one of these files is missing, the game still runs by using generated canvas 
 - Animated chaser that idles, jogs/runs, faces the player, speeds up after power restoration, and staggers when hit by the flashlight.
 - Spark plug collection loop that unlocks generator repair.
 - Generator power surge that brightens the warehouse dramatically and opens the exit gate.
+- Red 3D fuse-box marker that guides the player to the generator objective.
 - Collision against major props so the player cannot walk through the warehouse set.
 - CCTV Camera View that pauses gameplay and shows the scene from an indoor security-camera angle with a film/security-feed overlay.
 - Start instruction screen, win screen, and game-over screen so the game feels complete instead of freezing.

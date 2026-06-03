@@ -91,6 +91,8 @@ let exitLight = null;
 let flashlight = null;
 let generatorGroup = null;
 let generatorCoreMaterial = null;
+let fuseBoxMarker = null;
+let fuseBoxMarkerMaterial = null;
 let gateLeft = null;
 let gateRight = null;
 let sparkPlugTemplate = null;
@@ -313,6 +315,8 @@ function makeMaterials() {
     sparkCeramic: new THREE.MeshStandardMaterial({ color: 0xe7dec9, emissive: 0x3d2813, emissiveIntensity: 0.18, roughness: 0.38 }),
     sparkMetal: new THREE.MeshStandardMaterial({ color: 0x9ca0a3, emissive: 0xffa33a, emissiveIntensity: 0.45, roughness: 0.26, metalness: 0.75 }),
     sparkGlow: new THREE.MeshBasicMaterial({ color: 0xffb23f, transparent: true, opacity: 0.44, depthWrite: false }),
+    markerRed: new THREE.MeshStandardMaterial({ color: 0xff2a2a, emissive: 0xff0505, emissiveIntensity: 1.8, roughness: 0.34 }),
+    markerGlow: new THREE.MeshBasicMaterial({ color: 0xff3333, transparent: true, opacity: 0.48, depthWrite: false }),
     concrete: new THREE.MeshStandardMaterial({ map: concreteTexture, color: 0x343239, roughness: 0.92 }),
     grime: new THREE.MeshBasicMaterial({ map: grimeTexture, transparent: true, opacity: 0.48, depthWrite: false }),
     generator: new THREE.MeshStandardMaterial({ map: rustTexture, color: 0x2c5e58, roughness: 0.78, metalness: 0.18 }),
@@ -647,6 +651,39 @@ function createGenerator() {
   poweredObjects.push({ material: generatorCoreMaterial, target: 2.4 });
   flickerMaterials.push(generatorCoreMaterial);
   addBoxCollider(generatorPosition.x, generatorPosition.z, 1.65, 1.15);
+  createFuseBoxMarker();
+}
+
+function createFuseBoxMarker() {
+  fuseBoxMarker = new THREE.Group();
+  fuseBoxMarker.name = 'red fuse box direction marker';
+  fuseBoxMarker.position.set(generatorPosition.x, 4.1, generatorPosition.z + 0.35);
+
+  fuseBoxMarkerMaterial = materials.markerRed.clone();
+  const arrowHead = new THREE.Mesh(shared.cone, fuseBoxMarkerMaterial);
+  arrowHead.name = 'downward red fuse box arrow';
+  arrowHead.scale.set(1.25, 1.45, 1.25);
+  arrowHead.rotation.z = Math.PI;
+  arrowHead.castShadow = false;
+  arrowHead.receiveShadow = false;
+  fuseBoxMarker.add(arrowHead);
+
+  const arrowStem = new THREE.Mesh(shared.pole, fuseBoxMarkerMaterial);
+  arrowStem.position.y = 0.88;
+  arrowStem.scale.set(1.2, 1.1, 1.2);
+  arrowStem.castShadow = false;
+  arrowStem.receiveShadow = false;
+  fuseBoxMarker.add(arrowStem);
+
+  const glowRing = new THREE.Mesh(shared.glowRing, materials.markerGlow.clone());
+  glowRing.position.y = -0.58;
+  glowRing.rotation.x = Math.PI / 2;
+  glowRing.scale.set(1.35, 1.35, 1.35);
+  glowRing.castShadow = false;
+  glowRing.receiveShadow = false;
+  fuseBoxMarker.add(glowRing);
+
+  scene.add(fuseBoxMarker);
 }
 
 function createCollectibles() {
@@ -1279,6 +1316,7 @@ function resetGame({ showIntro = false } = {}) {
   collectibles.forEach((collectible) => {
     collectible.visible = true;
     collectible.userData.collected = false;
+    collectible.rotation.set(0, 0, 0);
   });
   poweredObjects.forEach((powered) => {
     powered.material.userData.power = 0.2;
@@ -1305,6 +1343,7 @@ function animate() {
   updatePlayer(delta);
   updateWakeTimer(elapsed);
   animateCollectibles(elapsed);
+  animateFuseBoxMarker(elapsed);
   animateLights(elapsed);
   animateGeneratorAndGate(delta, elapsed);
   animateClown(delta, elapsed);
@@ -1399,8 +1438,21 @@ function animateCollectibles(elapsed) {
   collectibles.forEach((collectible, index) => {
     if (collectible.userData.collected) return;
     collectible.position.y = collectible.userData.baseY + Math.sin(elapsed * 2.7 + index) * 0.16;
-    collectible.rotation.y += 0.025 + index * 0.0012;
   });
+}
+
+function animateFuseBoxMarker(elapsed) {
+  if (!fuseBoxMarker) return;
+  const shouldShow = gameState !== 'gateOpen' && gameState !== 'won' && gameState !== 'caught';
+  fuseBoxMarker.visible = shouldShow;
+  if (!shouldShow) return;
+
+  const urgency = collected === totalSparkPlugs ? 1 : 0.58;
+  fuseBoxMarker.position.y = 4.1 + Math.sin(elapsed * 3.4) * 0.18;
+  fuseBoxMarker.scale.setScalar(1 + Math.sin(elapsed * 5.2) * 0.05);
+  if (fuseBoxMarkerMaterial) {
+    fuseBoxMarkerMaterial.emissiveIntensity = urgency * (1.45 + Math.abs(Math.sin(elapsed * 6.4)) * 1.15);
+  }
 }
 
 function animateLights(elapsed) {
